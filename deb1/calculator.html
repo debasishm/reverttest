@@ -1,0 +1,152 @@
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		
+		
+	</head>
+	<body>
+		<div class="calculator">
+			<table>
+				<thead>
+					<tr>
+						<th colspan="5">Calculator<th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td colspan="5">
+							<input type="text" size="15" disabled="disable" id="result">
+						</td>
+					</tr>
+					<tr>
+						<td><button type="button" value="1">1</button></td>
+						<td><button type="button" value="2">2</button></td>
+						<td><button type="button" value="3">3</button></td>
+						<td><button type="button" value="4">4</button></td>
+						<td><button type="button" value="+">+</button></td>
+					</tr>
+					<tr>
+						<td><button type="button" value="5">5</button></td>
+						<td><button type="button" value="6">6</button></td>
+						<td><button type="button" value="7">7</button></td>
+						<td><button type="button" value="8">8</button></td>
+						<td><button type="button" value="-">-</button></td>
+					</tr>
+					<tr>
+						<td><button type="button" value="9">9</button></td>
+						<td><button type="button" value="0">0</button></td>
+						<td><button type="button" value="=">=</button></td>
+						<td><button type="button" value="*">*</button></td>
+						<td><button type="button" value="/">/</button></td>
+					</tr>
+					<tr>
+						<td></td>						
+						<td colspan="3"><button type="button" value="clear">Clear</button></td>						
+						<td></td>
+					</tr>
+				</tbody>
+			</table>			
+		</div>		
+		<script>
+			$(".calculator").ready(function(){
+			
+				var num_one = '';
+				var num_two = '';
+				var result = '';
+				var operator_one = '';
+				var operator_two = '';
+				
+				var clearContent = function(){					
+					num_one = '';
+					num_two = '';
+					result = '';
+					operator_one = '';
+					operator_two = '';
+					$("#result").val('');					
+				};
+				
+				//clear after loading
+				clearContent();
+				
+				$("button").click(function(){					
+					var btn_value = $(this).val();
+					result = $("#result").val();
+					
+					if( $.isNumeric(btn_value) ){
+						if( num_one === ''){
+							num_one = btn_value;
+						}else if( operator_one === ''){
+							num_one += btn_value;
+						}else{
+							num_two += btn_value;
+						}
+					}else if( num_one !== '' ){
+						
+						if( btn_value !== 'clear'){
+							if( operator_one === ''){
+								operator_one = btn_value;
+							}else{
+								operator_two = btn_value;
+							}
+							calculate();	
+						}else{
+							clearContent();	
+						}
+						
+						//if it is an equal to then the operator value is blank
+						if( btn_value === '='){
+							operator_one = '';
+						}
+					}
+					//$("#result").val( result+btn_value);
+					$("#result").val( num_one+operator_one+num_two+operator_two);
+				});
+				
+				var calculate = function(){
+					
+					if( num_one !== '' && num_two !== '' && operator_one !== '' && operator_two !== '')
+					{
+						
+						switch(operator_one) {
+							case '+':
+								result = parseInt(num_one) + parseInt(num_two);
+								break;
+							case '-':
+								result = parseInt(num_one) - parseInt(num_two);
+								break;
+							case '*':
+								result = parseInt(num_one) * parseInt(num_two);
+								break;
+							case '/':
+								result = parseInt(num_one) / parseInt(num_two);
+								break;
+							case '=':
+								result = num_one;								
+								break;
+							case 'clear':
+								clearContent();
+								break;
+						}
+						
+						if(operator_two === '='){
+							operator_two = '';
+						}
+						
+						operator_one = operator_two;
+						console.log(operator_one);
+						operator_two = '';
+						$("#result").val( result+operator_one);
+						num_two = '';
+						num_one = result;
+					}
+					
+					console.log('num_one:'+num_one);
+					console.log('num_two:'+num_two);
+					console.log('operator_one:'+operator_one);
+					console.log('operator_two:'+operator_two);					
+				};				
+			});
+		</script>
+	</body>
+</html>
+

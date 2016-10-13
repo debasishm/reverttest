@@ -1,0 +1,1 @@
+this is the content from the document that i have to collect and show in the page.
